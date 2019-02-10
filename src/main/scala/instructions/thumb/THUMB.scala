@@ -1,7 +1,9 @@
+package instructions.thumb
+
 import scala.util.matching.Regex
 
 object THUMB {
-  val Format1: Regex = "^000(00|01|10)([01]{5})([01]{3})([01]{3})$".r
+  val Format1: Regex = "^000(00|01|10)([01]{5})([01]{3})([01]{3})$".r // Check after 2
   val Format2: Regex = "^00011([01])([01])([01]{3})([01]{3})([01]{3})$".r
   val Format3: Regex = "^001([01]{2})([01]{3})([01]{8})$".r
   val Format4: Regex = "^010000([01]{4})([01]{3})([01]{3})$".r
@@ -16,7 +18,7 @@ object THUMB {
   val Format13: Regex = "^10110000([01])([01]{7})$".r
   val Format14: Regex =  "^1011([01])10([01])([01]{8})$".r
   val Format15: Regex = "^1100([01])([01]{3})([01]{8})$".r
-  val Format16: Regex = "^1101([01]{4})([01]{8})$".r
+  val Format16: Regex = "^1101([01]{4})([01]{8})$".r // Check after 17
   val Format17: Regex = "^11011111([01]{8})$".r
   val Format18: Regex = "^11100([01]{11})$".r
   val Format19: Regex = "^1111([01])([01]{11})$".r

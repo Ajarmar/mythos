@@ -1,5 +1,5 @@
 package instructions
 
-class Instruction {
+abstract class Instruction {
 
 }

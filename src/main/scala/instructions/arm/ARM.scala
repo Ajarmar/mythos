@@ -1,3 +1,5 @@
+package instructions.arm
+
 import scala.util.matching.Regex
 
 object ARM {

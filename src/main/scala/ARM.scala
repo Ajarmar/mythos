@@ -1,5 +1,5 @@
 import scala.util.matching.Regex
-// val Format: Regex = "^([01]{4})$".r
+
 object ARM {
   // Data Processing must be checked AFTER Multiply, MultiplyLong, SingleDataSwap,
   // BX, HalfwordDataTransferReg, HalfwordDataTransferImm

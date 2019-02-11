@@ -1,10 +1,5 @@
 package instructions.thumb.format1
 
-import instructions.thumb.ThumbInstruction
-
-case class LSR(offset5: String, rs: String, rd: String) extends ThumbInstruction {
+case class LSR(offset5: String, rs: String, rd: String) extends Format1(offset5: String, rs: String, rd: String) {
   override val mnemonic: String = "lsr"
-  override val operands: List[String] = regNameFormat(List(rd,rs)) ++ List(immValueFormat(offset5))
-  override val addrOperands: List[String] = List()
-  override val regListOperands: List[String] = List()
 }

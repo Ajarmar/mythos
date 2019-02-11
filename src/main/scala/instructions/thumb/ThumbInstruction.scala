@@ -2,12 +2,13 @@ package instructions.thumb
 
 import instructions.Instruction
 import instructions.thumb.format1._
+import instructions.thumb.format2.Format2
 
 abstract class ThumbInstruction extends Instruction {
   val mnemonic: String
-  val operands: List[String]
-  val addrOperands: List[String]
-  val regListOperands: List[String]
+  val operands: List[String] = List()
+  val addrOperands: List[String] = List()
+  val regListOperands: List[String] = List()
 
   val regNameFormat: List[String] => List[String] = (regs: List[String]) =>
     regs.map(reg => "r".concat(Integer.parseInt(reg,2).toString))
@@ -48,5 +49,6 @@ abstract class ThumbInstruction extends Instruction {
 object ThumbInstruction {
   def apply(binary: String): ThumbInstruction = binary match {
     case THUMB.Format1(op, offset5, rs, rd) => Format1(op, offset5, rs, rd)
+    case THUMB.Format2(i, op, rn_offset3, rs, rd) => Format2(i, op, rn_offset3, rs, rd)
   }
 }

@@ -3,7 +3,7 @@ package instructions.thumb.format1
 import instructions.thumb.ThumbInstruction
 
 abstract class Format1 extends ThumbInstruction {
-  val rd, rs, offset5: String
+  val offset5, rs, rd: String
   override val operands: List[String] = regNameFormat(List(rd,rs)) ++ List(immValueFormat(offset5))
   override val addrOperands: List[String] = List()
   override val regListOperands: List[String] = List()

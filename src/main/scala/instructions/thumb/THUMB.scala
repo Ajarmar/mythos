@@ -16,7 +16,7 @@ object THUMB {
   val Format11: Regex = "^1001([01])([01]{3})([01]{8})$".r
   val Format12: Regex = "^1010([01])([01]{3})([01]{8})$".r
   val Format13: Regex = "^10110000([01])([01]{7})$".r
-  val Format14: Regex =  "^1011([01])10([01])([01]{8})$".r
+  val Format14: Regex = "^1011([01])10([01])([01]{8})$".r
   val Format15: Regex = "^1100([01])([01]{3})([01]{8})$".r
   val Format16: Regex = "^1101([01]{4})([01]{8})$".r // Check after 17
   val Format17: Regex = "^11011111([01]{8})$".r

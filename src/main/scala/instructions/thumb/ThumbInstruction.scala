@@ -47,10 +47,6 @@ abstract class ThumbInstruction extends Instruction {
 
 object ThumbInstruction {
   def apply(binary: String): ThumbInstruction = binary match {
-    case THUMB.Format1(op, offset5, rs, rd) => op match {
-      case "00" => LSL(offset5,rs,rd)
-      case "01" => LSR(offset5,rs,rd)
-      case "10" => ASR(offset5,rs,rd)
-    }
+    case THUMB.Format1(op, offset5, rs, rd) => Format1(op, offset5, rs, rd)
   }
 }

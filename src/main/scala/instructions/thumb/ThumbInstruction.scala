@@ -1,10 +1,12 @@
 package instructions.thumb
 
 import instructions.Instruction
-import instructions.thumb.format1._
+import instructions.thumb.format1.Format1
 import instructions.thumb.format2.Format2
 import instructions.thumb.format3.Format3
 import instructions.thumb.format4.Format4
+import instructions.thumb.format5.Format5
+import instructions.thumb.format6.Format6
 
 abstract class ThumbInstruction extends Instruction {
   val mnemonic: String
@@ -18,6 +20,7 @@ abstract class ThumbInstruction extends Instruction {
   val addrFormat: List[String] => String = (ops: List[String]) => "[" + ops.mkString(", ") + "]"
   val regListFormat: String => String = (regs: String) =>
     "{" + regListFormatRec(regs.replaceAll("0*$","").toList.reverse,0).replaceAll("^,","") + "}"
+  val specialFormatting: Option[(Int => String) => String] = None
 
   private def regListFormatRec(regs: List[Char], consecutive: Int): String = {
     if (regs.isEmpty) return ""
@@ -54,5 +57,7 @@ object ThumbInstruction {
     case THUMB.Format2(i, op, rn_offset3, rs, rd) => Format2(i, op, rn_offset3, rs, rd)
     case THUMB.Format3(op, rd, offset8) => Format3(op, rd, offset8)
     case THUMB.Format4(op, rs, rd) => Format4(op, rs, rd)
+    case THUMB.Format5(op, h1, h2, rs_hs, rd_hd) => Format5(op, h1, h2, rs_hs, rd_hd)
+    case THUMB.Format6(rd, word8) => Format6(rd, word8)
   }
 }

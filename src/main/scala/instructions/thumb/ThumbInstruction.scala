@@ -3,6 +3,8 @@ package instructions.thumb
 import instructions.Instruction
 import instructions.thumb.format1._
 import instructions.thumb.format2.Format2
+import instructions.thumb.format3.Format3
+import instructions.thumb.format4.Format4
 
 abstract class ThumbInstruction extends Instruction {
   val mnemonic: String
@@ -50,5 +52,7 @@ object ThumbInstruction {
   def apply(binary: String): ThumbInstruction = binary match {
     case THUMB.Format1(op, offset5, rs, rd) => Format1(op, offset5, rs, rd)
     case THUMB.Format2(i, op, rn_offset3, rs, rd) => Format2(i, op, rn_offset3, rs, rd)
+    case THUMB.Format3(op, rd, offset8) => Format3(op, rd, offset8)
+    case THUMB.Format4(op, rs, rd) => Format4(op, rs, rd)
   }
 }

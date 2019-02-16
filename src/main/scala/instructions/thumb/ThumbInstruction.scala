@@ -9,6 +9,7 @@ import instructions.thumb.format5.Format5
 import instructions.thumb.format6.Format6
 import instructions.thumb.format7.Format7
 import instructions.thumb.format8.Format8
+import instructions.thumb.format9.Format9
 
 abstract class ThumbInstruction extends Instruction {
   val mnemonic: String
@@ -63,5 +64,6 @@ object ThumbInstruction {
     case THUMB.Format6(rd, word8) => Format6(rd, word8)
     case THUMB.Format7(l, b, ro, rb, rd) => Format7(l, b, ro, rb, rd)
     case THUMB.Format8(h, s, ro, rb, rd) => Format8(h, s, ro, rb, rd)
+    case THUMB.Format9(b, l, offset5, rb, rd) => Format9(b, l, offset5, rb, rd)
   }
 }

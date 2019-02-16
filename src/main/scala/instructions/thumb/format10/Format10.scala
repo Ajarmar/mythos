@@ -5,7 +5,7 @@ import instructions.thumb.ThumbInstruction
 abstract class Format10 extends ThumbInstruction {
   val offset5, rb, rd: String
   override val operands: List[String] = regNameFormat(List(rd))
-  override val addrOperands: List[String] = List(addrFormat(List(rb, immValueFormat(offset5))))
+  override val addrOperands: List[String] = List(addrFormat(regNameFormat(List(rb)) ++ List(immValueFormat(offset5))))
 }
 
 object Format10 {

@@ -2,6 +2,7 @@ package instructions.thumb
 
 import instructions.Instruction
 import instructions.thumb.format1.Format1
+import instructions.thumb.format10.Format10
 import instructions.thumb.format2.Format2
 import instructions.thumb.format3.Format3
 import instructions.thumb.format4.Format4
@@ -65,5 +66,6 @@ object ThumbInstruction {
     case THUMB.Format7(l, b, ro, rb, rd) => Format7(l, b, ro, rb, rd)
     case THUMB.Format8(h, s, ro, rb, rd) => Format8(h, s, ro, rb, rd)
     case THUMB.Format9(b, l, offset5, rb, rd) => Format9(b, l, offset5, rb, rd)
+    case THUMB.Format10(l, offset5, rb, rd) => Format10(l, offset5, rb, rd)
   }
 }

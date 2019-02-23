@@ -12,9 +12,9 @@ import instructions.thumb.format6.Format6
 import instructions.thumb.format7.Format7
 import instructions.thumb.format8.Format8
 import instructions.thumb.format9.Format9
-// val args: Array[Int] = Array().map(a => Integer.parseInt(a,2))
 
 abstract class ThumbInstruction extends Instruction {
+  // Values for instruction displaying
   val mnemonic: String
   val operands: List[String] = List()
   val addrOperands: List[String] = List()

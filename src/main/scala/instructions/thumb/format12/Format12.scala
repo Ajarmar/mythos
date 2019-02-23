@@ -4,7 +4,7 @@ import instructions.thumb.ThumbInstruction
 
 abstract class Format12 extends ThumbInstruction {
   val sp, rd, word8: Int
-  override val operands: List[String] = regNameFormat(List(rd)) ++ List(if (sp == 1) "SP" else "PC") ++ List(immValueFormat(word8))
+  override val operands: List[String] = regNameFormat(List(rd)) ++ List(if (sp == 1) "SP" else "PC",immValueFormat(word8 << 2))
 
 }
 

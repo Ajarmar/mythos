@@ -1,5 +1,5 @@
 package instructions.thumb.format5
 
-case class MOV(h1: String, h2: String, rs_hs: String, rd_hd: String) extends Format5 {
+case class MOV(h1: Int, h2: Int, rs_hs: Int, rd_hd: Int) extends Format5 {
   override val mnemonic: String = "mov"
 }

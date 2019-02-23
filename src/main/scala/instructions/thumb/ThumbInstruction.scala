@@ -12,6 +12,7 @@ import instructions.thumb.format6.Format6
 import instructions.thumb.format7.Format7
 import instructions.thumb.format8.Format8
 import instructions.thumb.format9.Format9
+// val args: Array[Int] = Array().map(a => Integer.parseInt(a,2))
 
 abstract class ThumbInstruction extends Instruction {
   val mnemonic: String
@@ -19,9 +20,8 @@ abstract class ThumbInstruction extends Instruction {
   val addrOperands: List[String] = List()
   val regListOperands: List[String] = List()
 
-  val regNameFormat: List[String] => List[String] = (regs: List[String]) =>
-    regs.map(reg => "r".concat(Integer.parseInt(reg,2).toString))
-  val immValueFormat: String => String = (imm: String) => "#0x".concat(Integer.parseInt(imm,2).toHexString)
+  val regNameFormat: List[Int] => List[String] = (regs: List[Int]) => regs.map(reg => "r".concat(reg.toString))
+  val immValueFormat: Int => String = (imm: Int) => "#0x".concat(imm.toHexString)
   val addrFormat: List[String] => String = (ops: List[String]) => "[" + ops.mkString(", ") + "]"
   val regListFormat: String => String = (regs: String) =>
     "{" + regListFormatRec(regs.replaceAll("0*$","").toList.reverse,0).replaceAll("^,","") + "}"

@@ -11,7 +11,7 @@ abstract class Format15 extends ThumbInstruction {
 object Format15 {
   def apply(l: String, rb: String, rlist: String): Format15 = {
     val arg0 = Integer.parseInt(rb)
-    val arg1: List[Int] = rlist.reverse.zipWithIndex.filter(_._1.equals('1')).map(_._2).toList
+    val arg1: List[Int] = rlist.reverse.zipWithIndex.filter(r => r._1.equals('1')).map(_._2).toList
     l match {
       case "0" => STMIA(arg0,arg1)
       case "1" => LDMIA(arg0,arg1)

@@ -23,31 +23,21 @@ abstract class ThumbInstruction extends Instruction {
   val regNameFormat: List[Int] => List[String] = (regs: List[Int]) => regs.map(reg => "r".concat(reg.toString))
   val immValueFormat: Int => String = (imm: Int) => "#0x".concat(imm.toHexString)
   val addrFormat: List[String] => String = (ops: List[String]) => "[" + ops.mkString(", ") + "]"
-  val regListFormat: String => String = (regs: String) =>
-    "{" + regListFormatRec(regs.replaceAll("0*$","").toList.reverse,0).replaceAll("^,","") + "}"
+  val regListFormat: List[Int] => String = (regs: List[Int]) =>
+    "{" + regListFormatRec(regs,0).replaceAll(",$","") + "}"
   val specialFormatting: Option[(Int => String) => String] = None
 
-  private def regListFormatRec(regs: List[Char], consecutive: Int): String = {
+  private def regListFormatRec(regs: List[Int], consecutive: Int): String = {
     if (regs.isEmpty) return ""
-    if (regs.head.equals('1')) {
-      if (consecutive == 0) {
-        ",r" + (16-regs.length).toString + regListFormatRec(regs.tail,consecutive+1)
-      } else {
-        if (regs.lengthCompare(1) == 0) {
-          return "-r" + (16-regs.length).toString
-        }
-        if (consecutive == 1) {
-          "-" + regListFormatRec(regs.tail,consecutive+1)
-        } else {
-          regListFormatRec(regs.tail,consecutive+1)
-        }
-      }
-    } else {
-      if (consecutive > 1) {
-        "r" + (15-regs.length).toString + regListFormatRec(regs.tail,0)
-      } else {
-        regListFormatRec(regs.tail,0)
-      }
+    val zipped = regs.zip(regs.tail)
+    if (zipped.isEmpty) return "r" + regs.head
+    consecutive match {
+      case 0 => "r" + zipped.head._1 +
+        (if (zipped.head._2 == zipped.head._1 + 1) "-" + regListFormatRec(regs.tail,1)
+        else "," + regListFormatRec(regs.tail,0))
+      case _ =>
+        if (zipped.head._2 == zipped.head._1 + 1) regListFormatRec(regs.tail,1)
+        else "r" + zipped.head._1 + "," + regListFormatRec(regs.tail,0)
     }
   }
 

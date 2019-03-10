@@ -4,7 +4,7 @@ import instructions.thumb.ThumbInstruction
 
 abstract class Format13 extends ThumbInstruction {
   val s, sword7: Int
-  override val operands: List[String] = List("SP",immValueFormat(if (s == 0) sword7 << 2 else -(sword7 << 2)))
+  override val operands: List[String] = List("sp",immValueFormat(sword7 << 2))
 }
 
 object Format13 {

@@ -12,7 +12,7 @@ object Format16 {
   def apply(cond: String, soffset8: String): Format16 = {
     val arg0 =
       (if (soffset8.head == '0') Integer.parseInt(soffset8.tail,2) << 1
-      else -((Integer.parseInt(soffset8.tail,2) ^ 0xff) + 1)) << 1
+      else -((Integer.parseInt(soffset8.tail,2) ^ 0x7f) + 1)) << 1
     cond match {
       case "0000" => BEQ(arg0)
       case "0001" => BNE(arg0)

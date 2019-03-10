@@ -4,6 +4,7 @@ import instructions.thumb.ThumbInstruction
 
 abstract class Format17 extends ThumbInstruction {
   val value8: Int
+  override val operands: List[String] = List(immValueFormat(value8))
 }
 
 object Format17 {

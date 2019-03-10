@@ -4,6 +4,14 @@ import instructions.Instruction
 import instructions.thumb.format1.Format1
 import instructions.thumb.format10.Format10
 import instructions.thumb.format11.Format11
+import instructions.thumb.format12.Format12
+import instructions.thumb.format13.Format13
+import instructions.thumb.format14.Format14
+import instructions.thumb.format15.Format15
+import instructions.thumb.format16.Format16
+import instructions.thumb.format17.Format17
+import instructions.thumb.format18.Format18
+import instructions.thumb.format19.Format19
 import instructions.thumb.format2.Format2
 import instructions.thumb.format3.Format3
 import instructions.thumb.format4.Format4
@@ -59,5 +67,13 @@ object ThumbInstruction {
     case THUMB.Format9(b, l, offset5, rb, rd) => Format9(b, l, offset5, rb, rd)
     case THUMB.Format10(l, offset5, rb, rd) => Format10(l, offset5, rb, rd)
     case THUMB.Format11(l, rd, word8) => Format11(l, rd, word8)
+    case THUMB.Format12(sp,rd,word8) => Format12(sp,rd,word8)
+    case THUMB.Format13(s,sword7) => Format13(s,sword7)
+    case THUMB.Format14(l,r,rlist) => Format14(l,r,rlist)
+    case THUMB.Format15(l,rb,rlist) => Format15(l,rb,rlist)
+    case THUMB.Format17(value8) => Format17(value8)
+    case THUMB.Format16(cond,soffset8) => Format16(cond,soffset8)
+    case THUMB.Format18(offset11) => Format18(offset11)
+    case THUMB.Format19(h,offset) => Format19(h,offset)
   }
 }

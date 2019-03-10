@@ -3,7 +3,7 @@ package instructions.thumb
 import scala.util.matching.Regex
 
 object THUMB {
-  val Format1: Regex = "^000(00|01|10)([01]{5})([01]{3})([01]{3})$".r // Check after 2
+  val Format1: Regex = "^000(00|01|10)([01]{5})([01]{3})([01]{3})$".r
   val Format2: Regex = "^00011([01])([01])([01]{3})([01]{3})([01]{3})$".r
   val Format3: Regex = "^001([01]{2})([01]{3})([01]{8})$".r
   val Format4: Regex = "^010000([01]{4})([01]{3})([01]{3})$".r

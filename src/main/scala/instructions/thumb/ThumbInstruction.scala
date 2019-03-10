@@ -23,7 +23,7 @@ import instructions.thumb.format9.Format9
 
 abstract class ThumbInstruction extends Instruction {
   // Values for instruction displaying
-  val mnemonic: String
+  val mnemonic: String = ""
   val operands: List[String] = List()
   val addrOperands: List[String] = List()
   val regListOperands: List[String] = List()
@@ -50,7 +50,7 @@ abstract class ThumbInstruction extends Instruction {
   }
 
   def disassembled(): String = {
-    (operands ::: addrOperands ::: regListOperands).mkString(", ")
+    mnemonic + " " + (operands ::: addrOperands ::: regListOperands).mkString(", ")
   }
 }
 
@@ -75,5 +75,6 @@ object ThumbInstruction {
     case THUMB.Format16(cond,soffset8) => Format16(cond,soffset8)
     case THUMB.Format18(offset11) => Format18(offset11)
     case THUMB.Format19(h,offset) => Format19(h,offset)
+    case _ => new ThumbError()
   }
 }

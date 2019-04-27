@@ -1,5 +1,9 @@
 package instructions.thumb
 
-class ThumbError extends ThumbInstruction {
-  override val mnemonic: String = "invalid"
+case class ThumbError(error: ThumbError.Value) extends ThumbInstruction {
+  override val mnemonic: String = "-"
+}
+
+object ThumbError extends Enumeration {
+  val NotAnInstruction, OutOfBounds = Value
 }

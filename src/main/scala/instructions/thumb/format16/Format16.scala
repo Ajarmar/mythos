@@ -28,7 +28,7 @@ object Format16 {
       case "1011" => BLT(arg0)
       case "1100" => BGT(arg0)
       case "1101" => BLE(arg0)
-      case _ => new ThumbError()
+      case _ => new ThumbError(ThumbError.NotAnInstruction)
     }
   }
 }

@@ -49,15 +49,15 @@ abstract class ThumbInstruction extends Instruction {
     }
   }
 
-  def disassembled(): String = {
+  override def disassembled(): String = {
     mnemonic + " " + (operands ::: addrOperands ::: regListOperands).mkString(", ")
   }
 }
 
 object ThumbInstruction {
   def apply(binary: String): ThumbInstruction = binary match {
-    case THUMB.Format1(op, offset5, rs, rd) => Format1(op, offset5, rs, rd)
     case THUMB.Format2(i, op, rn_offset3, rs, rd) => Format2(i, op, rn_offset3, rs, rd)
+    case THUMB.Format1(op, offset5, rs, rd) => Format1(op, offset5, rs, rd)
     case THUMB.Format3(op, rd, offset8) => Format3(op, rd, offset8)
     case THUMB.Format4(op, rs, rd) => Format4(op, rs, rd)
     case THUMB.Format5(op, h1, h2, rs_hs, rd_hd) => Format5(op, h1, h2, rs_hs, rd_hd)
@@ -75,6 +75,6 @@ object ThumbInstruction {
     case THUMB.Format16(cond,soffset8) => Format16(cond,soffset8)
     case THUMB.Format18(offset11) => Format18(offset11)
     case THUMB.Format19(h,offset) => Format19(h,offset)
-    case _ => new ThumbError()
+    case _ => new ThumbError(ThumbError.NotAnInstruction)
   }
 }

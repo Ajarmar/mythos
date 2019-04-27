@@ -1,5 +1,7 @@
-import java.nio.{ByteBuffer, ByteOrder}
+package control
+
 import java.nio.file.{Files, Paths}
+import java.nio.{ByteBuffer, ByteOrder}
 
 class ROMParser {
   def importRom(path: String): ByteBuffer = {

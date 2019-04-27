@@ -1,8 +1,8 @@
 package gui
 
 import javax.swing.filechooser.FileNameExtensionFilter
-import javax.swing.table.TableColumn
-import javax.swing.{UIManager, UnsupportedLookAndFeelException}
+import javax.swing.table.{TableCellRenderer, TableColumn}
+import javax.swing.{JTable, UIManager, UnsupportedLookAndFeelException}
 
 import control.Controller
 
@@ -27,6 +27,7 @@ class MythosGUI(c: Controller) extends MainFrame {
   // Instruction table
   private val instrTableColumns = 4
   private val instrTable: Table = new Table(rows = 4000000, columns = instrTableColumns) {
+
     font = Font("Monospaced",Font.Bold,12)
     rowHeight = 20
     for (i <- 0 until instrTableColumns) {
@@ -36,6 +37,31 @@ class MythosGUI(c: Controller) extends MainFrame {
     }
   }
   private val instrTableScroll = new ScrollPane(instrTable) {
+  }
+
+  private val dataTableColumns = 16
+
+  private val dataTable: Table = new Table(Array.fill(24768,16)(0).map(_.toArray[Any]), (0 to 15).map(_.toHexString.toUpperCase)) {
+    font = Font("Monospaced",Font.Bold,12)
+    rowHeight = 16
+    val renderer = new DataCellRenderer
+    peer.setDefaultRenderer(classOf[Object],renderer)
+    for (i <- 0 until dataTableColumns) {
+      val col: TableColumn = peer.getColumnModel.getColumn(i)
+      col.setPreferredWidth(16)
+    }
+  }
+
+  private val dataTableScroll = new ScrollPane(dataTable) {
+    rowHeaderView = new ListView(
+      (0x02000000 to 0x0203FFFF by 16).map(i => "0x0".+(i.toHexString.toUpperCase()))
+        ++ (0x03000000 to 0x03007FFF by 16).map(i => "0x0".+(i.toHexString.toUpperCase()))
+        ++ (0x04000000 to 0x040003FF by 16).map(i => "0x0".+(i.toHexString.toUpperCase()))
+        ++ (0x05000000 to 0x050003FF by 16).map(i => "0x0".+(i.toHexString.toUpperCase()))
+        ++ (0x06000000 to 0x06017FFF by 16).map(i => "0x0".+(i.toHexString.toUpperCase()))
+        ++ (0x07000000 to 0x070003FF by 16).map(i => "0x0".+(i.toHexString.toUpperCase()))) {
+      //font = Font("Monospaced",Font.Plain,12)
+    }
   }
 
   // Main frame contents
@@ -66,6 +92,7 @@ class MythosGUI(c: Controller) extends MainFrame {
     add(button,constraints(0,0,anchor = GridBagPanel.Anchor.FirstLineStart))
     add(fileField,constraints(1,0,anchor = GridBagPanel.Anchor.FirstLineStart))
     add(instrTableScroll,constraints(1,1,anchor = GridBagPanel.Anchor.FirstLineStart))
+    add(dataTableScroll,constraints(1,2,anchor = GridBagPanel.Anchor.FirstLineStart))
   }
 
   listenTo(button)

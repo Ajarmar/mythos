@@ -1,5 +1,7 @@
 package gui
 
+import java.awt.Color
+import javax.swing.border.LineBorder
 import javax.swing.filechooser.FileNameExtensionFilter
 import javax.swing.table.{TableCellRenderer, TableColumn}
 import javax.swing.{JTable, UIManager, UnsupportedLookAndFeelException}
@@ -27,7 +29,6 @@ class MythosGUI(c: Controller) extends MainFrame {
   // Instruction table
   private val instrTableColumns = 4
   private val instrTable: Table = new Table(rows = 4000000, columns = instrTableColumns) {
-
     font = Font("Monospaced",Font.Bold,12)
     rowHeight = 20
     for (i <- 0 until instrTableColumns) {
@@ -40,12 +41,12 @@ class MythosGUI(c: Controller) extends MainFrame {
   }
 
   private val dataTableColumns = 16
-
-  private val dataTable: Table = new Table(Array.fill(24768,16)(0).map(_.toArray[Any]), (0 to 15).map(_.toHexString.toUpperCase)) {
+  private val dataTable: Table = new Table(Array.fill(24768,16)("00").map(_.toArray[Any]), (0 to 15).map(_.toHexString.toUpperCase)) {
     font = Font("Monospaced",Font.Bold,12)
     rowHeight = 16
-    val renderer = new DataCellRenderer
-    peer.setDefaultRenderer(classOf[Object],renderer)
+    showGrid = false
+    peer.setCellSelectionEnabled(true)
+    peer.setDefaultRenderer(classOf[Object],new DataCellRenderer)
     for (i <- 0 until dataTableColumns) {
       val col: TableColumn = peer.getColumnModel.getColumn(i)
       col.setPreferredWidth(16)
@@ -62,6 +63,10 @@ class MythosGUI(c: Controller) extends MainFrame {
         ++ (0x07000000 to 0x070003FF by 16).map(i => "0x0".+(i.toHexString.toUpperCase()))) {
       //font = Font("Monospaced",Font.Plain,12)
     }
+  }
+
+  private val tablesPane = new SplitPane(Orientation.Horizontal,instrTableScroll,dataTableScroll) {
+    resizeWeight = 0.6
   }
 
   // Main frame contents
@@ -88,11 +93,11 @@ class MythosGUI(c: Controller) extends MainFrame {
       c.anchor = anchor
       c
     }
-
     add(button,constraints(0,0,anchor = GridBagPanel.Anchor.FirstLineStart))
-    add(fileField,constraints(1,0,anchor = GridBagPanel.Anchor.FirstLineStart))
-    add(instrTableScroll,constraints(1,1,anchor = GridBagPanel.Anchor.FirstLineStart))
-    add(dataTableScroll,constraints(1,2,anchor = GridBagPanel.Anchor.FirstLineStart))
+    add(fileField,constraints(1,0,weightx = 0.5,fill=GridBagPanel.Fill.Horizontal,insets = new Insets(2,0,0,0),anchor = GridBagPanel.Anchor.FirstLineStart))
+    //add(instrTableScroll,constraints(0,1,gridwidth = 2,weightx = 0.9,weighty = 0.8,fill=GridBagPanel.Fill.Both,anchor = GridBagPanel.Anchor.FirstLineStart))
+    //add(dataTableScroll,constraints(0,2,gridwidth = 2,weightx = 0.9,weighty = 0.7,fill=GridBagPanel.Fill.Both,anchor = GridBagPanel.Anchor.FirstLineStart))
+    add(tablesPane,constraints(0,1,gridwidth = 2,weightx = 0.9,weighty = 0.7,fill=GridBagPanel.Fill.Both,anchor = GridBagPanel.Anchor.FirstLineStart))
   }
 
   listenTo(button)

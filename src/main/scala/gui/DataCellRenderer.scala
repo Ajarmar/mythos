@@ -12,7 +12,6 @@ class DataCellRenderer extends DefaultTableCellRenderer {
     val maybeValue: Option[Any] = Option(value)
     if (!isSelected) {
       maybeValue.getOrElse(None) match {
-        case _: String => l.asInstanceOf[JLabel].setBackground(Color.GREEN)
         case _ =>
       }
     }

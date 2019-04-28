@@ -1,17 +1,17 @@
 package gui
 
-import java.awt.Color
-import javax.swing.border.LineBorder
+import java.awt.event.KeyEvent
 import javax.swing.filechooser.FileNameExtensionFilter
 import javax.swing.table.{TableCellRenderer, TableColumn}
 import javax.swing._
 
 import control.Controller
 
+import scala.collection.mutable
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.swing._
-import scala.swing.event.ButtonClicked
+import scala.swing.event.{ButtonClicked, Key}
 import scala.util.{Failure, Success}
 
 class MythosGUI(c: Controller) extends MainFrame {
@@ -21,9 +21,21 @@ class MythosGUI(c: Controller) extends MainFrame {
   final val fc: FileChooser = new FileChooser()
   fc.fileFilter = new FileNameExtensionFilter("GBA ROMs", "gba")
 
-  val button: Button = new Button("Select file")
+  //val button: Button = new Button("Select file")
   val fileField: TextField = new TextField(columns = 32) {
     editable = false
+  }
+
+  private val loadRom = new MenuItem("Open ROM") {
+    mnemonic = Key.O
+    peer.setAccelerator(KeyStroke.getKeyStroke("control O"))
+  }
+
+  menuBar = new MenuBar {
+    contents += new Menu("File") {
+      mnemonic = Key.F
+      contents += loadRom
+    }
   }
 
   // Instruction table
@@ -94,18 +106,16 @@ class MythosGUI(c: Controller) extends MainFrame {
       c.anchor = anchor
       c
     }
-    add(button,constraints(0,0,anchor = GridBagPanel.Anchor.FirstLineStart))
-    add(fileField,constraints(1,0,weightx = 0.5,fill=GridBagPanel.Fill.Horizontal,insets = new Insets(2,0,0,0),anchor = GridBagPanel.Anchor.FirstLineStart))
-    //add(instrTableScroll,constraints(0,1,gridwidth = 2,weightx = 0.9,weighty = 0.8,fill=GridBagPanel.Fill.Both,anchor = GridBagPanel.Anchor.FirstLineStart))
-    //add(dataTableScroll,constraints(0,2,gridwidth = 2,weightx = 0.9,weighty = 0.7,fill=GridBagPanel.Fill.Both,anchor = GridBagPanel.Anchor.FirstLineStart))
+
+    add(fileField,constraints(1,0,weightx = 0.5,fill=GridBagPanel.Fill.Horizontal,anchor = GridBagPanel.Anchor.FirstLineStart))
     add(tablesPane,constraints(0,1,gridwidth = 2,weightx = 0.9,weighty = 0.7,fill=GridBagPanel.Fill.Both,anchor = GridBagPanel.Anchor.FirstLineStart))
   }
 
-  listenTo(button)
+  listenTo(loadRom)
 
   reactions += {
 
-    case ButtonClicked(`button`) => {
+    case ButtonClicked(`loadRom`) => {
       val ret: FileChooser.Result.Value = fc.showOpenDialog(MythosGUI.this)
       ret match {
         case FileChooser.Result.Approve => {

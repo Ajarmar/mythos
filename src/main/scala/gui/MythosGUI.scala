@@ -4,7 +4,7 @@ import java.awt.Color
 import javax.swing.border.LineBorder
 import javax.swing.filechooser.FileNameExtensionFilter
 import javax.swing.table.{TableCellRenderer, TableColumn}
-import javax.swing.{JTable, UIManager, UnsupportedLookAndFeelException}
+import javax.swing._
 
 import control.Controller
 
@@ -47,6 +47,7 @@ class MythosGUI(c: Controller) extends MainFrame {
     showGrid = false
     peer.setCellSelectionEnabled(true)
     peer.setDefaultRenderer(classOf[Object],new DataCellRenderer)
+    peer.setDefaultEditor(classOf[Object],new DataCellEditor)
     for (i <- 0 until dataTableColumns) {
       val col: TableColumn = peer.getColumnModel.getColumn(i)
       col.setPreferredWidth(16)

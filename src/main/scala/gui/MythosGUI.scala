@@ -121,7 +121,7 @@ class MythosGUI(c: Controller) extends MainFrame {
         case FileChooser.Result.Approve => {
           val filepath = fc.selectedFile.getAbsolutePath
           fileField.text = filepath
-          val instrList: Future[List[(String,String)]] = Future {
+          val instrList: Future[List[(String,String,String)]] = Future {
             c.initSimulator(filepath)
             c.getAllROMInstructions(filepath)
           }
@@ -129,7 +129,8 @@ class MythosGUI(c: Controller) extends MainFrame {
             case Success(instrs) => Swing.onEDT {
               instrs.foreach(i => {
                 instrTable.update(instrs.indexOf(i),MythosGUI.ADDR_COLUMN,i._1)
-                instrTable.update(instrs.indexOf(i),MythosGUI.INSTR_COLUMN,i._2)
+                instrTable.update(instrs.indexOf(i),MythosGUI.HEX_COLUMN,i._2)
+                instrTable.update(instrs.indexOf(i),MythosGUI.INSTR_COLUMN,i._3)
               })
             }
             case Failure(e) => e.printStackTrace()
@@ -173,7 +174,7 @@ object MythosGUI {
 
   val CURSOR_COLUMN_WIDTH = 20
   val ADDR_COLUMN_WIDTH = 60
-  val HEX_COLUMN_WIDTH = 60
+  val HEX_COLUMN_WIDTH = 30
   val INSTR_COLUMN_WIDTH = 200
 
   val instrTableWidths: Map[Int, Int] = Map(

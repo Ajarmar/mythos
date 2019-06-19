@@ -34,11 +34,11 @@ class Simulator(rom: ByteBuffer) {
     instructionToText(makeInstruction(thumb = true,offset),offset)
   }
 
-  def getROMInstructionStrings: List[(String,String)] = {
+  def getROMInstructionStrings: List[(String,String,String)] = {
     localInstructions
       .toSeq
       .sortWith(_._1 < _._1)
-      .map(i => ("0x0" + (i._1 + 0x08000000).toHexString,instructionToText(i._2,i._1)))
+      .map(i => ("0x0" + (i._1 + 0x08000000).toHexString,(rom.getShort(i._1) & 0xFFFF | 0x10000).toHexString.substring(1).toUpperCase,instructionToText(i._2,i._1)))
       .toList
   }
 

@@ -22,39 +22,174 @@ import instructions.thumb.format8.Format8
 import instructions.thumb.format9.Format9
 
 abstract class ThumbInstruction extends Instruction {
-  // Values for instruction displaying
-  val mnemonic: String = ""
-  val operands: List[String] = List()
-  val addrOperands: List[String] = List()
-  val regListOperands: List[String] = List()
 
-  val regNameFormat: List[Int] => List[String] = (regs: List[Int]) => regs.map(reg => "r".concat(reg.toString))
-  val immValueFormat: Int => String = (imm: Int) => "#0x".concat(imm.toHexString)
-  val addrFormat: List[String] => String = (ops: List[String]) => "[" + ops.mkString(", ") + "]"
-  val regListFormat: List[Int] => String = (regs: List[Int]) =>
-    "{" + regListFormatRec(regs,0).replaceAll(",$","") + "}"
-  val specialFormatting: Option[(Int => String) => String] = None
-
-  private def regListFormatRec(regs: List[Int], consecutive: Int): String = {
-    if (regs.isEmpty) return ""
-    val zipped = regs.zip(regs.tail)
-    if (zipped.isEmpty) return "r" + regs.head
-    consecutive match {
-      case 0 => "r" + zipped.head._1 +
-        (if (zipped.head._2 == zipped.head._1 + 1) "-" + regListFormatRec(regs.tail,1)
-        else "," + regListFormatRec(regs.tail,0))
-      case _ =>
-        if (zipped.head._2 == zipped.head._1 + 1) regListFormatRec(regs.tail,1)
-        else "r" + zipped.head._1 + "," + regListFormatRec(regs.tail,0)
-    }
-  }
-
-  override def disassembled(): String = {
-    mnemonic + " " + (operands ::: addrOperands ::: regListOperands).mkString(", ")
-  }
 }
 
 object ThumbInstruction {
+  /*def apply(instr: Short): ThumbInstruction = {
+    instr >> 13 & 0x7 match {
+      case 0 =>
+        instr >> 11 & 0x3 match {
+          case 3 =>
+            Format2(
+              instr >> 10 & 0x1,  // I
+              instr >> 9 & 0x1,   // Op
+              instr >> 6 & 0x7,   // Rn/Offset3
+              instr >> 3 & 0x7,   // Rs
+              instr & 0x7         // Rd
+            )
+          case _ =>
+            Format1(
+              instr >> 11 & 0x3,  // Op
+              instr >> 6 & 0x1F,  // Offset5
+              instr >> 3 & 0x7,   // Rs
+              instr & 0x7         // Rd
+            )
+        }
+      case 1 =>
+        Format3(
+          instr >> 11 & 0x3,  // Op
+          instr >> 8 & 0x7,   // Rd
+          instr & 0xFF        // Offset8
+        )
+      case 2 =>
+        instr >> 10 & 0x7 match {
+          case 0 =>
+            Format4(
+              instr >> 6 & 0xF, // Op
+              instr >> 3 & 0x7, // Rs
+              instr & 0x7       // Rd
+            )
+          case 1 =>
+            Format5(
+              instr >> 8 & 0x3, // Op
+              instr >> 7 & 0x1, // H1
+              instr >> 6 & 0x1, // H2
+              instr >> 3 & 0x7, // Rs/Hs
+              instr & 0x7       // Rd/Hd
+            )
+          case 2 =>
+            Format6(
+              instr >> 8 & 0x7, // Rd
+              instr & 0xFF      // Word8
+            )
+          case 3 =>
+            Format6(
+              instr >> 8 & 0x7, // Rd
+              instr & 0xFF      // Word8
+            )
+        }
+        instr >> 12 & 0x1 match {
+          case 1 =>
+            instr >> 9 & 0x1 match {
+              case 0 =>
+                Format7(
+                  instr >> 11 & 0x1,  // L
+                  instr >> 10 & 0x1,  // B
+                  instr >> 6 & 0x7,   // Ro
+                  instr >> 3 & 0x7,   // Rb
+                  instr & 0x7         // Rd
+                )
+              case 1 =>
+                Format8(
+                  instr >> 11 & 0x1,  // H
+                  instr >> 10 & 0x1,  // S
+                  instr >> 6 & 0x7,   // Ro
+                  instr >> 3 & 0x7,   // Rb
+                  instr & 0x7         // Rd)
+            }
+        }
+      case 3 =>
+        Format9(
+          instr >> 12 & 0x1,  // B
+          instr >> 11 & 0x1,  // L
+          instr >> 6 & 0x1F,  // Offset5
+          instr >> 3 & 0x7,   // Rb
+          instr & 0x7         // Rd
+        )
+      case 4 =>
+        instr >> 12 & 0x1 match {
+          case 0 =>
+            Format10(
+              instr >> 11 & 0x1,  // L
+              instr >> 6 & 0x1F,  // Offset5
+              instr >> 3 & 0x7,   // Rb
+              instr & 0x7         // Rd
+            )
+          case 1 =>
+            Format11(
+              instr >> 11 & 0x1,  // L
+              instr >> 8 & 0x7,   // Rd
+              instr & 0xFF        // Word8
+            )
+        }
+      case 5 =>
+        instr >> 12 & 0x1 match {
+          case 0 =>
+            Format12(
+              instr >> 11 & 0x1,  // SP
+              instr >> 8 & 0x7,   // Rd
+              instr & 0xFF        // Word8
+            )
+          case 1 =>
+            instr >> 9 & 0x3 match {
+              case 0 =>
+                instr >> 8 & 0xF match {
+                  case 0 =>
+                    Format13(
+                      instr >> 7 & 0x1, // S
+                      instr & 0x7F      // SWord7
+                    )
+                }
+              case 2 =>
+                Format14(
+                  instr >> 11 & 0x1,  // L
+                  instr >> 8 & 0x1,   // R
+                  instr & 0xFF        // Rlist
+                )
+            }
+        }
+      case 6 =>
+        instr >> 12 & 0x1 match {
+          case 0 =>
+            Format15(
+              instr >> 1 & 0x1, // L
+              instr >> 8 & 0x7, // Rb
+              instr & 0xFF      // Rlist
+            )
+          case 1 =>
+            instr >> 8 & 0xF match {
+              case 0xF =>
+                Format17(
+                  instr & 0xFF  // Value8
+                )
+              case _ =>
+                Format16(
+                  instr >> 8 & 0xF, // Cond
+                  instr & 0xFF      // Soffset8
+                )
+            }
+        }
+      case 7 =>
+        instr >> 11 & 0x3 match {
+          case 0 =>
+            Format18(
+              instr & 0x7FF // Offset11
+            )
+          case 2 =>
+            Format19(
+              0,            // H
+              instr & 0x7FF // Offset
+            )
+          case 3 =>
+            Format19(
+              1,            // H
+              instr & 0x7FF // Offset
+            )
+        }
+    }
+    ThumbError(ThumbError.NotAnInstruction)
+  }*/
   def apply(binary: String): ThumbInstruction = binary match {
     case THUMB.Format2(i, op, rn_offset3, rs, rd) => Format2(i, op, rn_offset3, rs, rd)
     case THUMB.Format1(op, offset5, rs, rd) => Format1(op, offset5, rs, rd)

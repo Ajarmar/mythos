@@ -12,7 +12,6 @@ object Main {
       val b = Integer.toBinaryString(rom.getShort() & 0xffff | 0x10000).substring(1)
       //System.out.println(b)
       val t = ThumbInstruction(b)
-      System.out.println(t.disassembled())
     }
   }
 }

@@ -1,5 +1,5 @@
 package instructions.thumb.format2
 
-case class SUB(i: Int, rn_offset3: Int, rs: Int, rd: Int) extends Format2 {
-  override val mnemonic: String = "sub"
+case class SUB(i: Byte, rn_offset3: Byte, rs: Byte, rd: Byte) extends Format2 {
+
 }

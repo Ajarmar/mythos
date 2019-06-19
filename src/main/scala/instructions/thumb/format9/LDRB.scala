@@ -1,5 +1,5 @@
 package instructions.thumb.format9
 
-case class LDRB(offset5: Int, rb: Int, rd: Int) extends Format9 {
-  override val mnemonic: String = "ldrb"
+case class LDRB(offset5: Byte, rb: Byte, rd: Byte) extends Format9 {
+
 }

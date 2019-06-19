@@ -3,16 +3,14 @@ package instructions.thumb.format16
 import instructions.thumb.{ThumbError, ThumbInstruction}
 
 abstract class Format16 extends ThumbInstruction {
-  val soffset8: Int
-  override val specialFormatting: Option[(Int => String) => String] =
-    Some((pcFunc: Int => String) => disassembled().replaceAll("\\[.*\\]",pcFunc(soffset8)))
+  val soffset8: Byte
 }
 
 object Format16 {
   def apply(cond: String, soffset8: String): ThumbInstruction = {
     val arg0 =
-      if (soffset8.head == '0') Integer.parseInt(soffset8.tail,2) << 1
-      else -((Integer.parseInt(soffset8.tail,2) ^ 0x7f) + 1) << 1
+      if (soffset8.head == '0') (Integer.parseInt(soffset8.tail,2) << 1).toByte
+      else (-((Integer.parseInt(soffset8.tail,2) ^ 0x7f) + 1) << 1).toByte
     cond match {
       case "0000" => BEQ(arg0)
       case "0001" => BNE(arg0)

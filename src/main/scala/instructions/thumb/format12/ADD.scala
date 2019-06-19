@@ -1,5 +1,5 @@
 package instructions.thumb.format12
 
-case class ADD(sp: Int, rd: Int, word8: Int) extends Format12 {
-  override val mnemonic: String = "add"
+case class ADD(sp: Short, rd: Short, word8: Short) extends Format12 {
+
 }

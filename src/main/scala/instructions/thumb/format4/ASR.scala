@@ -1,5 +1,5 @@
 package instructions.thumb.format4
 
-case class ASR(rs: Int, rd: Int) extends Format4 {
-  override val mnemonic: String = "asr"
+case class ASR(rs: Byte, rd: Byte) extends Format4 {
+
 }

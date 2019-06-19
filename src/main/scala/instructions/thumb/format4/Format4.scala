@@ -3,13 +3,12 @@ package instructions.thumb.format4
 import instructions.thumb.ThumbInstruction
 
 abstract class Format4 extends ThumbInstruction {
-  val rs, rd: Int
-  override val operands: List[String] = regNameFormat(List(rd,rs))
+  val rs, rd: Byte
 }
 
 object Format4 {
   def apply(op: String, rs: String, rd: String): Format4 = {
-    val args: Array[Int] = Array(rs,rd).map(a => Integer.parseInt(a,2))
+    val args: Array[Byte] = Array(rs,rd).map(a => Integer.parseInt(a,2).toByte)
     op match {
       case "0000" => AND(args(0),args(1))
       case "0001" => EOR(args(0),args(1))

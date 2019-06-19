@@ -1,5 +1,5 @@
 package instructions.thumb.format4
 
-case class SBC(rs: Int, rd: Int) extends Format4 {
-  override val mnemonic: String = "sbc"
+case class SBC(rs: Byte, rd: Byte) extends Format4 {
+
 }

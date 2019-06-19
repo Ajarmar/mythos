@@ -1,5 +1,5 @@
 package instructions.thumb.format19
 
-case class BL(h: Int, offset: Int) extends Format19 {
-  override val mnemonic: String = "bl"
+case class BL(h: Short, offset: Short) extends Format19 {
+
 }

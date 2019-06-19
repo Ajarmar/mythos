@@ -3,7 +3,7 @@ package instructions.thumb.format19
 import instructions.thumb.ThumbInstruction
 
 abstract class Format19 extends ThumbInstruction {
-  val h, offset: Int
+  val h, offset: Short
 }
 
 object Format19 {
@@ -15,6 +15,6 @@ object Format19 {
         else -((Integer.parseInt(offset.tail,2) ^ 0x7ff) + 1) << 12
       else
         Integer.parseInt(offset,2) << 1
-    BL(arg0,arg1)
+    BL(arg0.toShort,arg1.toShort)
   }
 }

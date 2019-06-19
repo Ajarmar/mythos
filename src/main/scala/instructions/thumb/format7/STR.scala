@@ -1,5 +1,5 @@
 package instructions.thumb.format7
 
-case class STR(ro: Int, rb: Int, rd: Int) extends Format7 {
-  override val mnemonic: String = "str"
+case class STR(ro: Byte, rb: Byte, rd: Byte) extends Format7 {
+
 }

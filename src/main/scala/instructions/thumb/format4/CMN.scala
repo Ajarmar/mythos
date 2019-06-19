@@ -1,5 +1,5 @@
 package instructions.thumb.format4
 
-case class CMN(rs: Int, rd: Int) extends Format4 {
-  override val mnemonic: String = "cmn"
+case class CMN(rs: Byte, rd: Byte) extends Format4 {
+
 }

@@ -15,7 +15,7 @@ class Controller {
     System.out.println("Time: " + (end - start))
   }
 
-  def getAllROMInstructions(filepath: String): List[(String,String,String)] = {
-    sims(filepath).getROMInstructionStrings
+  def getROMInstructions(filepath: String, start: Int, end: Int): List[(String,String,String)] = {
+    sims(filepath).getThumbInstructionStrings(start,end)
   }
 }

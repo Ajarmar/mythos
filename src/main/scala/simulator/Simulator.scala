@@ -28,22 +28,22 @@ import scala.collection.mutable
 
 class Simulator(rom: ByteBuffer) {
 
-  val localInstructions: mutable.Map[Int,Instruction] = makeInstructions(thumb = true,0,4000)
+  val thumbInstructions: mutable.Map[Int,Instruction] = mutable.Map()
 
   def getInstructionString(offset: Int): String = {
     instructionToText(makeInstruction(thumb = true,offset),offset)
   }
 
-  def getROMInstructionStrings: List[(String,String,String)] = {
-    localInstructions
+  def getThumbInstructionStrings(start: Int, end: Int): List[(String,String,String)] = {
+    makeInstructions(thumb = true,start,end)
+    thumbInstructions
       .toSeq
       .sortWith(_._1 < _._1)
       .map(i => ("0x0" + (i._1 + 0x08000000).toHexString,(rom.getShort(i._1) & 0xFFFF | 0x10000).toHexString.substring(1).toUpperCase,instructionToText(i._2,i._1)))
       .toList
   }
 
-  private def makeInstructions(thumb: Boolean, start: Int, end: Int): mutable.Map[Int, Instruction] = {
-    var instructions: mutable.Map[Int,Instruction] = mutable.Map()
+  private def makeInstructions(thumb: Boolean, start: Int, end: Int): Unit = {
     var statsMap: mutable.Map[String,Int] = mutable.Map()
 
     rom.position(start)
@@ -52,13 +52,12 @@ class Simulator(rom: ByteBuffer) {
       val instr = makeInstruction(thumb)
       //statsMap += (instr.getClass.toString.split('.').last -> (statsMap.getOrElse(instr.getClass.toString.split('.').last,0) + 1))
       instr match {
-        case t: ThumbError => if (t.error == ThumbError.OutOfBounds) return instructions
-        case _: ThumbInstruction => instructions += (addr -> instr)
+        case t: ThumbError => if (t.error == ThumbError.OutOfBounds) return
+        case _: ThumbInstruction => thumbInstructions += (addr -> instr)
       }
     }
     //val totalInstrs: Double = statsMap.values.sum
     //statsMap.foreach(i => println(i._1 + ": " + 100*i._2/totalInstrs + "%"))
-    instructions
   }
 
   private def makeInstruction(thumb: Boolean): Instruction = {

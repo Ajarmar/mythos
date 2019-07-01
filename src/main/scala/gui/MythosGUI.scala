@@ -1,6 +1,6 @@
 package gui
 
-import java.awt.event.KeyEvent
+import java.awt.event.{KeyEvent, MouseEvent}
 import javax.swing.filechooser.FileNameExtensionFilter
 import javax.swing.table.{TableCellRenderer, TableColumn}
 import javax.swing._
@@ -11,7 +11,7 @@ import scala.collection.mutable
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.swing._
-import scala.swing.event.{ButtonClicked, Key}
+import scala.swing.event.{ButtonClicked, Key, MouseClicked}
 import scala.util.{Failure, Success}
 
 class MythosGUI(c: Controller) extends MainFrame {
@@ -40,13 +40,33 @@ class MythosGUI(c: Controller) extends MainFrame {
 
   // Instruction table
   private val instrTableColumns = 4
-  private val instrTable: Table = new Table(rows = 4000000, columns = instrTableColumns) {
+  private val instrTable: Table = new Table(rows = 40000, columns = instrTableColumns) {
     font = Font("Monospaced",Font.Bold,12)
     rowHeight = 20
     for (i <- 0 until instrTableColumns) {
       val col: TableColumn = peer.getColumnModel.getColumn(i)
       col.setPreferredWidth(MythosGUI.instrTableWidths(i))
       col.setHeaderValue(MythosGUI.instrTableColumnNames(i))
+    }
+    listenTo(mouse.clicks)
+    reactions += {
+      case e @ MouseClicked(component,point,_,_,_) =>
+        if (e.peer.getButton == MouseEvent.BUTTON3) {
+          val menu = new PopupMenu {
+            contents += new MenuItem("Go to address...") {
+              mnemonic = Key.G
+              peer.setAccelerator(KeyStroke.getKeyStroke("control G"))
+            }
+            contents += new MenuItem("Mark selected rows as non-instructions") {
+              reactions += {
+                case ButtonClicked(_) =>
+                  println("Selected rows: ")
+                  instrTable.peer.getSelectedRows.foreach(r => println(r))
+              }
+            }
+          }
+          menu.show(component,point.getX.toInt,point.getY.toInt)
+        }
     }
   }
   private val instrTableScroll = new ScrollPane(instrTable) {
@@ -123,16 +143,18 @@ class MythosGUI(c: Controller) extends MainFrame {
           fileField.text = filepath
           val instrList: Future[List[(String,String,String)]] = Future {
             c.initSimulator(filepath)
-            c.getAllROMInstructions(filepath)
+            c.getROMInstructions(filepath,0,40000) //TODO not hard coded
           }
           instrList onComplete {
-            case Success(instrs) => Swing.onEDT {
-              instrs.foreach(i => {
+            case Success(instrs) => instrs.foreach(i => {
+              Swing.onEDT {
                 instrTable.update(instrs.indexOf(i),MythosGUI.ADDR_COLUMN,i._1)
                 instrTable.update(instrs.indexOf(i),MythosGUI.HEX_COLUMN,i._2)
                 instrTable.update(instrs.indexOf(i),MythosGUI.INSTR_COLUMN,i._3)
-              })
-            }
+              }
+              Thread.sleep(1)
+            })
+
             case Failure(e) => e.printStackTrace()
           }
         }
